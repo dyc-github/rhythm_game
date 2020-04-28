@@ -3,7 +3,7 @@ import java.awt.Graphics2D;
 public class Arrow
 {   
     private int yPos;
-    private static final int YVEL = 10;
+    private static final int YVEL = 5;
     private static final int SHIFT= 50;
     private ArrowLane lane;
     public Arrow(ArrowLane al) {
@@ -13,6 +13,9 @@ public class Arrow
     
     public void move() {
         yPos += YVEL;
+        if (yPos > RhythmGame.getScreenHeight()) {
+            lane.remove();
+        }
     }
     
     public void draw(Graphics2D g2, Direction dir) {

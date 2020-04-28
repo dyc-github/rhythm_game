@@ -8,7 +8,7 @@ public class ArrowLane
 
     private final int xPos;
 
-    private static final int goal = 13;// change later
+    private static final int goal = 800;// change later
 
     private LinkedList<Arrow> arrows;
 
@@ -35,27 +35,37 @@ public class ArrowLane
         {
             return 0;
         }
-        Arrow arrow = arrows.peek();
-        int diff = Math.abs( arrow.getY() - goal );
-
-        // TODO define screensize and half arrow height
-
-        if ( diff <= 10 )
-        { // TODO define perfect
-            return 3; // FYI 3 is best
-        }
-        else if ( diff <= 25 )
-        { // TODO define ok
-            return 2;
-        }
-        else if ( diff <= 50 )
-        { // TODO defien bad
-            return 1;
-        }
-        else
+        Arrow arrow;
+        int diff;
+        int score = 0;
+        int position = 0;
+        do
         {
-            return 0;
+            arrow = arrows.get( position );
+            diff = Math.abs( arrow.getY() - goal );
+            if ( diff <= 25 )
+            { // TODO define perfect
+                score = 3; // FYI 3 is best
+            }
+            else if ( diff <= 50 )
+            { // TODO define ok
+                score = 2;
+            }
+            else if ( diff <= 75 )
+            { // TODO defien bad
+                score = 1;
+            }
+            else
+            {
+                score = 0;
+                position++;
+            }
+            
+        } while (score == 0 && arrow.getY()>goal+75 && position<arrows.size());
+        if (score>0) {
+            arrows.remove( position );
         }
+        return score;
     }
 
 
@@ -71,11 +81,17 @@ public class ArrowLane
     }
 
 
+    // There is an error when an arrow is removed due to the size of the list
+    // changing so if we make an array with the copy, the error dissapears since
+    // the program draws according to the array. There is a cast exception error
+    // when the code first starts but it dissapears which probably means that it
+    // might not be the best way
     public void move()
     {
-        for ( Arrow a : arrows )
+        Object[] arrowArr = arrows.toArray();
+        for ( Object a : arrowArr )
         {
-            a.move();
+            ( (Arrow)a ).move();
         }
     }
 
@@ -83,12 +99,17 @@ public class ArrowLane
     public void draw( Graphics2D g2 )
     {
         Iterator<Arrow> arrowsIterator = arrows.descendingIterator();
-        System.out.println( "arrowLane draw" );
         while ( arrowsIterator.hasNext() )
         {
             Arrow arrow = arrowsIterator.next();
             arrow.draw( g2, direction );
         }
+    }
+
+
+    public static int getGoal()
+    {
+        return goal;
     }
 
 }

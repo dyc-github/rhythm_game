@@ -1,12 +1,17 @@
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
 public class RhythmGame extends JPanel implements ActionListener
@@ -22,11 +27,14 @@ public class RhythmGame extends JPanel implements ActionListener
     private PrintWriter output;
     private MusicPlayer  musicPlayer;
     private JFrame window;
+    private InputMap im;
+    private ActionMap am;
+    private int score = 0;
     
     public RhythmGame() {
         window = new JFrame();
         constructJPanel( window );
-        timer = new Timer(5,this);
+        timer = new Timer(10,this);
         lanes = new ArrowLane[4];
         Direction[] dir = {Direction.LEFT, Direction.DOWN, Direction.UP, Direction.RIGHT};
         for (int i = 0; i<4;i++) {
@@ -49,8 +57,21 @@ public class RhythmGame extends JPanel implements ActionListener
         
     }
     
+    private void setKeyBindingsPlay() {
+        im = this.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
+        am = this.getActionMap();
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_LEFT,0 ), "Left" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_DOWN,0 ), "Down" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_UP,0 ), "Up" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_RIGHT,0 ), "Right" );
+        am.put( "Left", new ArrowListener(this,"Left") );
+        am.put( "Down", new ArrowListener(this,"Down") );
+        am.put( "Up", new ArrowListener(this,"Up") );
+        am.put( "Right", new ArrowListener(this,"Right") );
+    }
+    
     public ArrowLane getArrowLane(int direction) {
-        if (direction<lanes.length-1) {
+        if (direction<lanes.length) {
             return lanes[direction];
         }
         return null;
@@ -59,7 +80,17 @@ public class RhythmGame extends JPanel implements ActionListener
     public void paintComponent(Graphics g) {
         super.paintComponent( g );
         Graphics2D g2 = (Graphics2D)g;
+        Font font = new Font("Helvetica",Font.LAYOUT_LEFT_TO_RIGHT,25);
+        g2.setFont( font );
+        g2.drawString( "Score: " + score, 50, 50 );
+        g2.drawLine( 0, ArrowLane.getGoal() - Arrow.getHalfHeight(), 
+            SCREEN_WIDTH, ArrowLane.getGoal() - Arrow.getHalfHeight() );
+        g2.drawLine( 0, ArrowLane.getGoal() + Arrow.getHalfHeight(), 
+            SCREEN_WIDTH, ArrowLane.getGoal() + Arrow.getHalfHeight() );
         for (ArrowLane al: lanes) {
+            if (Math.random()*150<1) {
+                al.add();
+            }
             al.draw( g2 );
         }
         //draw the lines
@@ -76,7 +107,12 @@ public class RhythmGame extends JPanel implements ActionListener
     }
     
     public void startPlay(String pathname) {
+        setKeyBindingsPlay();
         timer.start();
+    }
+    
+    public void addScore(int i) {
+        score = score + 100*i;
     }
     
     public void startRecord(String pathname) {
