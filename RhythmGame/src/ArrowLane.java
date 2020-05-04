@@ -8,11 +8,7 @@ public class ArrowLane
 
     private final int xPos;
 
-<<<<<<< HEAD
-    private static final int goal = 13;//TODO change later
-=======
     private static final int goal = 800;// change later
->>>>>>> 99e55e2d7ff401c0f91f5e5012248bcdb35e0645
 
     private LinkedList<Arrow> arrows;
 

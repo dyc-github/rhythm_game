@@ -47,7 +47,6 @@ public class MusicPlayer
 		
 		// TODO catch error things
 		catch (FileNotFoundException e) {
-<<<<<<< HEAD
 			System.out.println("idk dont @ me");
 			return false;
 		}
@@ -57,26 +56,13 @@ public class MusicPlayer
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.out.println("idk dont @ me");
-=======
 			System.out.println("idk dont @ me1");
 			return false;
 		}
-		catch (UnsupportedAudioFileException e) {
-			System.out.println("idk dont @ me2");
-			return false;
-		} catch (IOException e) {
+		catch (LineUnavailableException e) {
 			// TODO Auto-generated catch block
-			System.out.println("idk dont @ me3");
->>>>>>> 4831d1edb1fb1bef7a5bfd1d4beed4d5361004c5
-			e.printStackTrace();
-			return false;
-		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch block
-<<<<<<< HEAD
 			System.out.println("idk dont @ me");
-=======
 			System.out.println("idk dont @ me4");
->>>>>>> 4831d1edb1fb1bef7a5bfd1d4beed4d5361004c5
 			e.printStackTrace();
 			return false;
 		}
