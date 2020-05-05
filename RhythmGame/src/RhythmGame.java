@@ -1,3 +1,4 @@
+
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -39,6 +40,7 @@ public class RhythmGame extends JPanel implements ActionListener {
 		timer = new Timer(5, this);
 		lanes = new ArrowLane[4];
 		musicPlayer = new MusicPlayer();
+
 		gameState = GameState.IDLE;
 		recorder = new Recorder(musicPlayer);
 		setKeyBindings();
@@ -155,7 +157,7 @@ public class RhythmGame extends JPanel implements ActionListener {
 		musicPlayer.play();
 
 	}
-	
+
 	public static int getScreenHeight() {
 		return SCREEN_HEIGHT;
 	}

@@ -60,6 +60,7 @@ public class MusicPlayer
 			return false;
 		} catch (LineUnavailableException e) {
 			// TODO Auto-generated catch block
+
 			System.out.println("idk dont @ me4");
 			e.printStackTrace();
 			return false;

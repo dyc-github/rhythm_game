@@ -22,6 +22,7 @@ public class ArrowListener extends AbstractAction implements ActionListener
     @Override
     public void actionPerformed( ActionEvent arg0 )
     {
+
         game.recieveInput(key);
         
     }
