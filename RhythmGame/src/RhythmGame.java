@@ -18,20 +18,20 @@ import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
 public class RhythmGame extends JPanel implements ActionListener {
-    private ArrowLane[] lanes;
+	private Recorder recorder;
+	private GameState gameState;
+	private ArrowLane[] lanes;
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT =1000;
     private int worldTime;
     private Timer timer;
-    private String pathnameFile;
-    private Scanner scanner;
     private String currentLine;
-    private PrintWriter output;
     private MusicPlayer  musicPlayer;
     private JFrame window;
     private InputMap im;
     private ActionMap am;
     private int score = 0;
+
 
 	public RhythmGame() {
 		window = new JFrame();
@@ -39,6 +39,9 @@ public class RhythmGame extends JPanel implements ActionListener {
 		timer = new Timer(5, this);
 		lanes = new ArrowLane[4];
 		musicPlayer = new MusicPlayer();
+		gameState = GameState.IDLE;
+		recorder = new Recorder(musicPlayer);
+		setKeyBindings();
 		Direction[] dir = { Direction.LEFT, Direction.DOWN, Direction.UP, Direction.RIGHT };
 		for (int i = 0; i < 4; i++) {
 			lanes[i] = new ArrowLane(100 + 200 * i, dir[i]);
@@ -59,7 +62,7 @@ public class RhythmGame extends JPanel implements ActionListener {
 
 	}
 	
-	private void setKeyBindingsPlay() {
+	private void setKeyBindings() {
         im = this.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
         am = this.getActionMap();
         im.put( KeyStroke.getKeyStroke( KeyEvent.VK_LEFT,0 ), "Left" );
@@ -71,13 +74,47 @@ public class RhythmGame extends JPanel implements ActionListener {
         am.put( "Up", new ArrowListener(this,"Up") );
         am.put( "Right", new ArrowListener(this,"Right") );
     }
+	
+	public void recieveInput(String input) {
+		System.out.println(input);
 
-	public ArrowLane getArrowLane(int direction) {
-		if (direction < lanes.length - 1) {
-			return lanes[direction];
+		//TODO you need to define gameState as recording and playing when you create the menu
+		if(gameState == gameState.IDLE) {
+			return;
 		}
-		return null;
+		else if(gameState == GameState.RECORD) {
+			recorder.record(input);
+		}
+		else if (gameState == GameState.PLAY) {
+			int comparison = 0;
+			
+			if (input.equals( "Left" )) {
+	            comparison = lanes[0].compare();
+	        }
+	        else if (input.equals( "Down" )) {
+	            comparison = lanes[1].compare();
+	        }
+	        else if (input.equals( "Up" )) {
+	            comparison = lanes[2].compare();
+	        }
+	        else if (input.equals( "Right" )) {
+	            comparison = lanes[3].compare();
+	        }
+	        System.out.println( comparison );
+	        addScore( comparison );
+		}
 	}
+	
+	public void addScore(int i) {
+        score = score + 100*i;
+    }
+
+//	public ArrowLane getArrowLane(int direction) {
+//		if (direction < lanes.length - 1) {
+//			return lanes[direction];
+//		}
+//		return null;
+//	}
 
     public void paintComponent(Graphics g) {
         super.paintComponent( g );
@@ -104,6 +141,13 @@ public class RhythmGame extends JPanel implements ActionListener {
 			al.move();
 		}
 		repaint();
+		if(!musicPlayer.isRunning()) {
+			if(gameState == GameState.RECORD) {
+				recorder.stopRecording();
+			}
+			gameState = GameState.IDLE;
+		}
+		System.out.println("idk");
 	}
 
 	public void startPlay(String pathname) {
@@ -111,74 +155,15 @@ public class RhythmGame extends JPanel implements ActionListener {
 		musicPlayer.play();
 
 	}
-
-	public void startRecord(String songTitle) {
-		musicPlayer.defineSong(songTitle + ".wav");
-		new File("levels").mkdir(); // creates a new levels folder if one was not created
-		String path = System.getProperty("user.dir") + "/levels/" + songTitle + "_Arrow.txt";
-		File recordFile = new File(path);
-		if (recordFile.exists()) {
-			System.out.println("file already exists");
-		} else {
-			try {
-				recordFile.createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				System.out.println("error creating file");
-				e.printStackTrace();
-				return;
-			}
-
-			try {
-				output = new PrintWriter(path);
-			} catch (FileNotFoundException e) {
-				System.out.println("cannot find" + songTitle + "_Arrow.txt");
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			musicPlayer.play();
-			scanner = new Scanner(System.in);
-			while (musicPlayer.isRunning()) {
-				String outputString = "";
-				// TODO reading inputs properly (below is just a temporary example)
-				String inputString = scanner.next();
-
-				switch (inputString) {
-				case "w":
-					outputString = "u";
-					break;
-				case "a":
-					outputString = "l";
-					break;
-				case "s":
-					outputString = "d";
-					break;
-				case "d":
-					outputString = "r";
-					break;
-				}
-				// end of stuff to replace
-				int constant = 0; // TODO figure out how much time to subtract
-				if (!outputString.isEmpty()) {
-					output.println(outputString + (musicPlayer.getCurrentTime() - constant));
-				}
-			}
-			output.close();
-
-		}
-
-	}
-
+	
 	public static int getScreenHeight() {
 		return SCREEN_HEIGHT;
 	}
 
 	public static void main(String[] args) {
-		RhythmGame game = new RhythmGame();
-		game.startRecord("song1");
+		RhythmGame game= new RhythmGame();
+		game.gameState = GameState.RECORD;
+		game.recorder.startNewRecodring("song2");
 
 	}
-
-
 }
