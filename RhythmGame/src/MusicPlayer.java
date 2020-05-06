@@ -1,3 +1,5 @@
+package rhythm_game.RhythmGame.src;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,9 +25,10 @@ public class MusicPlayer
 	
 	public MusicPlayer() {
 		new File(musicFile).mkdir();
+		//??? what does this do, it doesn't go to a variable
 	}
 
-	public boolean defineSong(String songTitle) {
+	public boolean defineSong(String pathname) {
 		if (clip!=null) {
 			clip.close();
 		}
@@ -33,7 +36,7 @@ public class MusicPlayer
 		// https://www.geeksforgeeks.org/play-audio-file-using-java/
 		try {
 			// create AudioInputStream object
-			audioInputStream = AudioSystem.getAudioInputStream(new File(path + "/" + songTitle)	.getAbsoluteFile());
+			audioInputStream = AudioSystem.getAudioInputStream(new File(pathname).getAbsoluteFile());
 
 			// create clip reference
 			clip = AudioSystem.getClip();
@@ -66,9 +69,15 @@ public class MusicPlayer
 			return false;
 		}
 	}
-	public void play() {
-		
-			clip.start();
+	public boolean play() {
+		try{
+		    clip.start();
+		    return true;
+		}
+		catch (Exception e) {
+		    System.out.println( "string not found" );
+		    return false;
+		}
 	}
 	
 	public void pause (){
@@ -79,6 +88,9 @@ public class MusicPlayer
 	}
 	
 	public boolean isRunning() {
+	    if (clip == null) {
+	        return false;
+	    }
 		return clip.isRunning();
 	}
 	
@@ -94,7 +106,7 @@ public class MusicPlayer
 	
 	public static void main(String[] args) { 
 		MusicPlayer musicPlayer = new MusicPlayer();
-		if (musicPlayer.defineSong("song2.wav")) {
+		if (musicPlayer.defineSong(System.getProperty( "user.dir" )+"\\music" + "\\song2.wav")) {
 
 			Scanner scanner = new Scanner(System.in);
 
