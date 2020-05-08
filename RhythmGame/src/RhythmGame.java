@@ -1,5 +1,8 @@
+package rhythm_game.RhythmGame.src;
+
 
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -21,6 +24,7 @@ import javax.swing.Timer;
 public class RhythmGame extends JPanel implements ActionListener {
 	private Recorder recorder;
 	private GameState gameState;
+	private MenuBar menuBar;
 	private ArrowLane[] lanes;
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT =1000;
@@ -36,22 +40,20 @@ public class RhythmGame extends JPanel implements ActionListener {
 
 	public RhythmGame() {
 		window = new JFrame();
-		constructJPanel(window);
-		timer = new Timer(5, this);
+
+		timer = new Timer(7 , this);
 		lanes = new ArrowLane[4];
 		musicPlayer = new MusicPlayer();
-
-		gameState = GameState.IDLE;
+		menuBar = new MenuBar(this,window,musicPlayer);
+		gameState = GameState.IDLE;//Should be IDLE, currently Play for testing
 		recorder = new Recorder(musicPlayer);
+		
 		setKeyBindings();
 		Direction[] dir = { Direction.LEFT, Direction.DOWN, Direction.UP, Direction.RIGHT };
 		for (int i = 0; i < 4; i++) {
 			lanes[i] = new ArrowLane(100 + 200 * i, dir[i]);
 		}
-		for (int i = 0; i < 4; i++) {
-			lanes[i].add();
-		}
-//        startPlay(null); //Remove this after we add file selection
+	    constructJPanel(window);
 		// SetWorldTime to a negative number depending on velocity
 	}
 
@@ -89,7 +91,7 @@ public class RhythmGame extends JPanel implements ActionListener {
 		}
 		else if (gameState == GameState.PLAY) {
 			int comparison = 0;
-			
+			System.out.println( "play" );
 			if (input.equals( "Left" )) {
 	            comparison = lanes[0].compare();
 	        }
@@ -142,20 +144,34 @@ public class RhythmGame extends JPanel implements ActionListener {
 		for (ArrowLane al : lanes) {
 			al.move();
 		}
-		repaint();
 		if(!musicPlayer.isRunning()) {
 			if(gameState == GameState.RECORD) {
 				recorder.stopRecording();
 			}
 			gameState = GameState.IDLE;
 		}
-		System.out.println("idk");
+	    repaint();
 	}
 
-	public void startPlay(String pathname) {
-		timer.start();
-		musicPlayer.play();
-
+	public void start(boolean isPlay) {
+	    //true = play, false = record
+	    if (musicPlayer.play()) {
+	        if (isPlay) {
+	            gameState = GameState.PLAY;
+	        }
+	        else{
+	            gameState = GameState.RECORD;
+	        }
+	        timer.start();
+	    }
+	    else {
+	        Graphics2D g2 = (Graphics2D)this.getGraphics();
+	        String str = "Music not found";
+	        g2.setFont( new Font("Helvetica",Font.LAYOUT_LEFT_TO_RIGHT,25) );
+	        FontMetrics fm = g2.getFontMetrics();
+	        int x = SCREEN_WIDTH/2 - (fm.stringWidth( str )/2);
+	        g2.drawString( str , x, 50 );
+	    }
 	}
 
 	public static int getScreenHeight() {
@@ -164,8 +180,8 @@ public class RhythmGame extends JPanel implements ActionListener {
 
 	public static void main(String[] args) {
 		RhythmGame game= new RhythmGame();
-		game.gameState = GameState.RECORD;
-		game.recorder.startNewRecodring("song2");
+//		game.gameState = GameState.RECORD;
+//		game.recorder.startNewRecodring("song2");
 
 	}
 }

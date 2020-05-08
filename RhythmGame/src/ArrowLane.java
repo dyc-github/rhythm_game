@@ -1,3 +1,5 @@
+package rhythm_game.RhythmGame.src;
+
 import java.awt.Graphics2D;
 import java.util.Iterator;
 import java.util.LinkedList;

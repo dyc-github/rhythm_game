@@ -1,3 +1,5 @@
+package rhythm_game.RhythmGame.src;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -11,7 +13,7 @@ import javax.swing.KeyStroke;
 public class ArrowListener extends AbstractAction implements ActionListener
 {
     private RhythmGame game;
-    String key;
+    private String key;
     
     public ArrowListener(RhythmGame g,String k) {
         game = g;

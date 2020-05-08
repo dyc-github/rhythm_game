@@ -1,3 +1,5 @@
+package rhythm_game.RhythmGame.src;
+
 import java.awt.Graphics2D;
 
 public class Arrow
