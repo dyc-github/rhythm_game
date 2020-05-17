@@ -1,4 +1,4 @@
-package rhythm_game.RhythmGame.src;
+package rhythm_game;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,7 +9,18 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-
+/**
+ * 
+ * This is the menu bar that allows the player to select songs and if they are
+ * recording or playing the song
+ *
+ *  @author  Ryan_Tai,David_Choi
+ *  @version May 11, 2020
+ *  @author  Period: 1
+ *  @author  Assignment: RhythmGame
+ *
+ *  @author  Sources: https://stackoverflow.com/questions/13516829/jfilechooser-change-default-directory-in-windows
+ */
 public class MenuBar implements ActionListener
 {
     private RhythmGame game;
@@ -19,6 +30,12 @@ public class MenuBar implements ActionListener
     JFileChooser chooser;
     MusicPlayer mp;
     
+    /**
+     * 
+     * @param g the game that is connected to the menu bar
+     * @param window the window that is connected to the menu bar
+     * @param musicPlayer the music player that is connected to the menu bar
+     */
     public MenuBar(RhythmGame g, JFrame window, MusicPlayer musicPlayer) {
         game = g;
         menubar = new JMenuBar();
@@ -53,7 +70,6 @@ public class MenuBar implements ActionListener
     @Override
     public void actionPerformed( ActionEvent e )
     {
-        //Some support from https://stackoverflow.com/questions/13516829/jfilechooser-change-default-directory-in-windows
         Object o = e.getSource();
         if (selectFile == o) {
             System.out.println( "File Selected" );
@@ -69,8 +85,6 @@ public class MenuBar implements ActionListener
             }
             System.out.println( "I got the Absolute Path of the file, I have no clue "
                 + "what to do with it, but I got it");
-            //TODO call define song, either change the parameters to the whole 
-            //pathname or remove the end from the pathname obtained by the method
         }
         else if (startGame == o) {
             System.out.println( "Game starts" );

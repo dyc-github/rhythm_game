@@ -1,4 +1,4 @@
-package rhythm_game.RhythmGame.src;
+package rhythm_game;
 
 import java.io.File;
 import java.io.FileNotFoundException;

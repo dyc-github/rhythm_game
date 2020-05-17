@@ -1,4 +1,4 @@
-package rhythm_game.RhythmGame.src;
+package rhythm_game;
 
 
 import java.awt.Font;
@@ -21,6 +21,18 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
+/**
+ * 
+ *  This represents the RhythmGame which contains the screen and the timer that
+ *  dictates the frame speed
+ *
+ *  @author  Ryan_Tai,David_Choi
+ *  @version May 11, 2020
+ *  @author  Period: 1
+ *  @author  Assignment: RhythmGame
+ *
+ *  @author  Sources: None
+ */
 public class RhythmGame extends JPanel implements ActionListener {
 	private Recorder recorder;
 	private GameState gameState;
@@ -37,7 +49,9 @@ public class RhythmGame extends JPanel implements ActionListener {
     private ActionMap am;
     private int score = 0;
 
-
+    /**
+     * Creates a RhythmGame
+     */
 	public RhythmGame() {
 		window = new JFrame();
 
@@ -57,6 +71,11 @@ public class RhythmGame extends JPanel implements ActionListener {
 		// SetWorldTime to a negative number depending on velocity
 	}
 
+	/**
+	 * 
+	 * Adds things such as the name and the ability to close it to the window
+	 * @param window2 the window which things are added on
+	 */
 	private void constructJPanel(JFrame window2) {
 		window.add(this);
 		window.setVisible(true);
@@ -66,6 +85,11 @@ public class RhythmGame extends JPanel implements ActionListener {
 
 	}
 	
+	/**
+	 * 
+	 * Creates key bindings and an ArrowListener so the user can interact with
+	 * the game
+	 */
 	private void setKeyBindings() {
         im = this.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
         am = this.getActionMap();
@@ -79,6 +103,13 @@ public class RhythmGame extends JPanel implements ActionListener {
         am.put( "Right", new ArrowListener(this,"Right") );
     }
 	
+	/**
+	 * 
+	 * Reacts according to the current state of the game and the key pressed.
+	 * Records the input if it is recording, calls an arrowlane's compare if playing
+	 * and does nothing if recording
+	 * @param input the key pressed
+	 */
 	public void recieveInput(String input) {
 		System.out.println(input);
 
@@ -109,6 +140,11 @@ public class RhythmGame extends JPanel implements ActionListener {
 		}
 	}
 	
+	/**
+	 * 
+	 * Increases the score
+	 * @param i the score to add times 100
+	 */
 	public void addScore(int i) {
         score = score + 100*i;
     }
@@ -120,6 +156,10 @@ public class RhythmGame extends JPanel implements ActionListener {
 //		return null;
 //	}
 
+	/**
+	 * paints the screen
+	 * @param g the graphics of the screen
+	 */
     public void paintComponent(Graphics g) {
         super.paintComponent( g );
         Graphics2D g2 = (Graphics2D)g;
@@ -153,6 +193,11 @@ public class RhythmGame extends JPanel implements ActionListener {
 	    repaint();
 	}
 
+	/**
+	 * 
+	 * Starts the play/recording of the game
+	 * @param isPlay true = playing, false = recording
+	 */
 	public void start(boolean isPlay) {
 	    //true = play, false = record
 	    if (musicPlayer.play()) {
@@ -174,10 +219,20 @@ public class RhythmGame extends JPanel implements ActionListener {
 	    }
 	}
 
+	/**
+	 * 
+	 * returns the height of the screen
+	 * @return screen height
+	 */
 	public static int getScreenHeight() {
 		return SCREEN_HEIGHT;
 	}
-
+	
+	/**
+	 * 
+	 * Starts the game by creating a new rhythmGame
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		RhythmGame game= new RhythmGame();
 //		game.gameState = GameState.RECORD;
