@@ -1,4 +1,3 @@
-package rhythm_game.RhythmGame.src;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,100 +12,131 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-
-
-public class MusicPlayer
-{
-	private String musicFile = "music"; 
-	// ah fyi System.getProperty("user.dir") just get the directory to RhythmGame
-	private String path = System.getProperty("user.dir") + "/" + musicFile;
+/**
+ * The MusicPlayer class is meant to play whatever music file it is given as
+ * well as give specific information about the music playing
+ * 
+ * @author Ryan Tai, David Choi
+ * @version May 11, 2020
+ * @author Period: 1
+ * @author Assignment: RhythmGame
+ * 
+ * @author Sources: GeeksForGeeks - How to play an Audio file using Java:
+ *         https://www.geeksforgeeks.org/play-audio-file-using-java/
+ */
+public class MusicPlayer {
 	private AudioInputStream audioInputStream;
-	private Clip clip; 
-	
-	public MusicPlayer() {
-		new File(musicFile).mkdir();
-		//??? what does this do, it doesn't go to a variable
-	}
+	private Clip clip;
 
-	public boolean defineSong(String pathname) {
-		if (clip!=null) {
+	/**
+	 * defines the song given a path
+	 * 
+	 * @param path the path to the song
+	 * @return
+	 */
+	public boolean defineSong(String path) {
+		if (clip != null) {
 			clip.close();
 		}
-		// ah i ripped this code from
 		// https://www.geeksforgeeks.org/play-audio-file-using-java/
 		try {
 			// create AudioInputStream object
-			audioInputStream = AudioSystem.getAudioInputStream(new File(pathname).getAbsoluteFile());
+			audioInputStream = AudioSystem.getAudioInputStream(new File(path).getAbsoluteFile());
 
 			// create clip reference
 			clip = AudioSystem.getClip();
 
 			// open audioInputStream to the clip
 			clip.open(audioInputStream);
-			
-			return true;
-		}
 
-		
-		// TODO catch error things
-		catch (FileNotFoundException e) {
-			System.out.println("idk dont @ me1");
+			return true;
+		} catch (FileNotFoundException e) {
+			System.out.println("Could not find the specified file");
 			return false;
-		}
-		catch (UnsupportedAudioFileException e) {
-			System.out.println("idk dont @ me2");
+		} catch (UnsupportedAudioFileException e) {
+			System.out.println("The audio file selected is unsuported");
 			return false;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.out.println("idk dont @ me3");
+			System.out.println("error occcured in retrieving the file");
 			e.printStackTrace();
 			return false;
 		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch block
-
-			System.out.println("idk dont @ me4");
+			System.out.println("line unavailable (baing used by another application)");
 			e.printStackTrace();
 			return false;
 		}
 	}
+
+	/**
+	 * plays the music
+	 * 
+	 * @return boolean to indicate whether starting the music was successful
+	 */
 	public boolean play() {
-		try{
-		    clip.start();
-		    return true;
-		}
-		catch (Exception e) {
-		    System.out.println( "string not found" );
-		    return false;
+		try {
+			clip.start();
+			return true;
+		} catch (Exception e) {
+			System.out.println("string not found");
+			return false;
 		}
 	}
-	
-	public void pause (){
+
+	/**
+	 * pauses the music
+	 */
+	public void pause() {
 		clip.stop();
 	}
+
+	/**
+	 * resets the music
+	 */
 	public void reset() {
 		clip.setFramePosition(0);
 	}
-	
+
+	/**
+	 * indicates whether the song is still running
+	 * 
+	 * @return true - song is still running false song has stopped
+	 */
 	public boolean isRunning() {
-	    if (clip == null) {
-	        return false;
-	    }
+		if (clip == null) {
+			return false;
+		}
 		return clip.isRunning();
 	}
-	
-	public int getCurrentTime(){
-		return (int)(clip.getMicrosecondPosition()+50000)/10000;
-	}
-	public int getTotalTime() {
-		return (int)(clip.getMicrosecondLength()+50000)/10000;
-	}
-	
 
-	
-	
-	public static void main(String[] args) { 
+	/**
+	 * return the current position of the song in milliseconds
+	 * 
+	 * @return the current position of the song in milliseconds
+	 */
+	public int getCurrentTime() {
+		// convert to milliseconds
+		return (int) (clip.getMicrosecondPosition() + 500) / 1000;
+	}
+
+	/**
+	 * returns the total time of the song in milliseconds
+	 * 
+	 * @return the total time of the song in milliseconds
+	 */
+	public int getTotalTime() {
+		// convert to milliseconds
+		return (int) (clip.getMicrosecondLength() + 500) / 1000;
+	}
+
+	/**
+	 * a main method used to test this class
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args) {
 		MusicPlayer musicPlayer = new MusicPlayer();
-		if (musicPlayer.defineSong(System.getProperty( "user.dir" )+"\\music" + "\\song2.wav")) {
+		if (musicPlayer.defineSong(System.getProperty("user.dir") + "\\music" + "\\song2.wav")) {
 
 			Scanner scanner = new Scanner(System.in);
 
@@ -139,4 +169,3 @@ public class MusicPlayer
 
 	}
 }
-
