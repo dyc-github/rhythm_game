@@ -18,15 +18,14 @@ public class ArrowLane {
 
 	private final int xPos;
 
-	private static int goal;// change later
+	private static int goal;
 
 	private LinkedList<Arrow> arrows;
 
 	private final Direction direction;
 
 	/**
-	 * 
-	 * @param xPos      the xCoordinate of all arrows in the lane
+	 * @param xPos the xCoordinate of all arrows in the lane
 	 * @param direction the direction of all arrows in the lane
 	 */
 
@@ -38,7 +37,6 @@ public class ArrowLane {
 	}
 
 	/**
-	 * 
 	 * Adds an arrow to the end/top of the arrowLane
 	 */
 	public void add() {
@@ -67,11 +65,11 @@ public class ArrowLane {
 		int score = 0;
 		if (arrow.getY() > goal - 100) {
 			diff = Math.abs(arrow.getY() - goal);
-			if (diff <= 27) { // TODO define perfect
-				score = 3; // FYI 3 is best
-			} else if (diff <= 60) { // TODO define ok
+			if (diff <= 27) {
+				score = 3;
+			} else if (diff <= 60) { 
 				score = 2;
-			} else if (diff <= 100) { // TODO define bad
+			} else if (diff <= 100) {
 				score = 1;
 			}
 
@@ -114,10 +112,8 @@ public class ArrowLane {
 	}
 
 	// There is an error when an arrow is removed due to the size of the list
-	// changing so if we make an array with the copy, the error dissapears since
-	// the program draws according to the array. There is a cast exception error
-	// when the code first starts but it dissapears which probably means that it
-	// might not be the best way
+	// changing so if we make an array with the copy, the error disappears since
+	// the program draws according to the array.
 	/**
 	 * 
 	 * Moves all arrows in the lane by iterating through the linked list and calling

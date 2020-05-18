@@ -46,7 +46,7 @@ public class RhythmGame extends JPanel implements ActionListener {
 	private MenuBar menuBar;
 	private ArrowLane[] lanes;
 	private static final int SCREEN_WIDTH = 800;
-	private static final int SCREEN_HEIGHT = 1000; // kinda irrelevent
+	private static final int SCREEN_HEIGHT = 1000;
 	private int worldTime;
 	private Timer timer;
 	private String currentLine = "";
@@ -81,8 +81,6 @@ public class RhythmGame extends JPanel implements ActionListener {
 		for (int i = 0; i < 4; i++) {
 			lanes[i] = new ArrowLane(100 + 200 * i, dir[i], window.getHeight());
 		}
-
-		// SetWorldTime to a negative number depending on velocity
 	}
 
 	/**
@@ -128,15 +126,12 @@ public class RhythmGame extends JPanel implements ActionListener {
 	 */
 	public void recieveInput(String input) {
 
-		// TODO you need to define gameState as recording and playing when you create
-		// the menu
 		if (gameState == gameState.IDLE) {
 			return;
 		} else if (gameState == GameState.RECORD) {
 			recorder.record(input);
 		} else if (gameState == GameState.PLAY) {
 			int comparison = 0;
-			System.out.println("play");
 			if (input.equals("Left")) {
 				comparison = lanes[0].compare();
 			} else if (input.equals("Down")) {
@@ -146,7 +141,6 @@ public class RhythmGame extends JPanel implements ActionListener {
 			} else if (input.equals("Right")) {
 				comparison = lanes[3].compare();
 			}
-			System.out.println(comparison);
 
 			addScore(comparison);
 		}
@@ -171,7 +165,6 @@ public class RhythmGame extends JPanel implements ActionListener {
 			scoreColor = Color.GREEN;
 			break;
 		}
-		System.out.println('i');
 		g2d.fillRect(0, window.getContentPane().getHeight() - Arrow.getHalfHeight() * 3, SCREEN_WIDTH,
 				Arrow.getHalfHeight() * 2);
 
@@ -356,8 +349,6 @@ public class RhythmGame extends JPanel implements ActionListener {
 	 */
 	public static void main(String[] args) {
 		RhythmGame game = new RhythmGame();
-//		game.gameState = GameState.RECORD;
-//		game.recorder.startNewRecodring("song2");
 
 	}
 }

@@ -10,6 +10,11 @@ import java.nio.file.FileAlreadyExistsException;
  * new file
  * 
  * @author Ryan Tai, David Choi
+ * @version May 18, 2020
+ * @author  Period: 1
+ * @author  Assignment: RhythmGame
+ *
+ *  @author  Sources: None
  *
  */
 public class Recorder {

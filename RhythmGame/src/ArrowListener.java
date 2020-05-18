@@ -32,10 +32,9 @@ public class ArrowListener extends AbstractAction implements ActionListener {
 	public ArrowListener(RhythmGame g, String k) {
 		game = g;
 		key = k;
-		System.out.println("constructed");
 	}
 
-	@Override // Aparently overrides don't need javadoc, they probably just have it
+	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		game.recieveInput(key);
 
