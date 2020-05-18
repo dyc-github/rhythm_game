@@ -1,4 +1,3 @@
-package rhythm_game.RhythmGame.src;
 
 
 import java.awt.Font;
