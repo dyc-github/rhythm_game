@@ -1,53 +1,70 @@
-package rhythm_game;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.FileAlreadyExistsException;
 
+/**
+ * the Recorder class is meant to record the users inputs and output them into a
+ * new file
+ * 
+ * @author Ryan Tai, David Choi
+ *
+ */
 public class Recorder {
 	private MusicPlayer musicPlayer;
 	private PrintWriter output;
 	private String path;
-	private final int CONSTANT = 0;
 
+	/**
+	 * A constructor that defines the musicPlayer and creates a new directory, if
+	 * one did not already exist, to store the levels
+	 * 
+	 * @param musicPlayer
+	 */
 	public Recorder(MusicPlayer musicPlayer) {
 		this.musicPlayer = musicPlayer;
 		new File("levels").mkdir(); // creates a new levels folder if one was not created
 		path = System.getProperty("user.dir") + "/levels/";
 	}
 
-	public void startNewRecodring(String songTitle) {
+	/**
+	 * creates a new txt file based on the songTitle
+	 * 
+	 * @param songTitle the title of the song
+	 * @throws FileAlreadyExistsException if the file to a song already exists then
+	 *                                    this method will throuw a
+	 *                                    FileAlreadyExists Exception
+	 */
+	public void startNewRecodring(String songTitle) throws FileAlreadyExistsException {
 		String levelPath = path + songTitle + "_Arrow.txt";
-		
-		musicPlayer.defineSong(songTitle + ".wav");
-		
+
 		File outputFile = new File(levelPath);
-		
+
 		if (outputFile.exists()) {
-			System.out.println("file already exists");
-			return;// TODO define the specifics of what happens if a record file already exists
+			throw new FileAlreadyExistsException(levelPath);
 		} else {
 			try {
 				outputFile.createNewFile();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				System.out.println("error creating file");
+				System.out.println("issue creating new file");
 				e.printStackTrace();
-				return;
 			}
-
 			try {
 				output = new PrintWriter(levelPath);
 			} catch (FileNotFoundException e) {
-				System.out.println("cannot find " + songTitle + "_Arrow.txt");
-				// TODO Auto-generated catch block
+				System.out.println("issue finding output file");
 				e.printStackTrace();
 			}
-			musicPlayer.play();
 		}
 	}
 
+	/**
+	 * records inputs into the the level file
+	 * 
+	 * @param direction the direction of the input
+	 */
 	public void record(String direction) {
 		if (musicPlayer.isRunning()) {
 			String outputString = "";
@@ -66,10 +83,14 @@ public class Recorder {
 				break;
 			}
 			if (!outputString.isEmpty()) {
-				output.println(outputString + (musicPlayer.getCurrentTime() - CONSTANT));
+				output.println(outputString + (musicPlayer.getCurrentTime()));
 			}
 		}
 	}
+
+	/**
+	 * Ends the recording of user inputs.
+	 */
 	public void stopRecording() {
 		System.out.println("close");
 		output.close();
