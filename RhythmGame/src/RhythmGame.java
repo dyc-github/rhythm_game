@@ -46,7 +46,7 @@ public class RhythmGame extends JPanel implements ActionListener {
 	private MenuBar menuBar;
 	private ArrowLane[] lanes;
 	private static final int SCREEN_WIDTH = 800;
-	private static final int SCREEN_HEIGHT = 1000; // kinda irrelevent
+	private static final int SCREEN_HEIGHT = 1000;
 	private int worldTime;
 	private Timer timer;
 	private String currentLine = "";
