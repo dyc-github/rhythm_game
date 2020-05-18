@@ -1,4 +1,5 @@
 
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -35,7 +36,7 @@ public class Arrow {
 
 	/**
 	 * 
-	 * Moves the arrow by its velocity
+	 * Moves the arrow by its velocity and removes it if its off the screen
 	 */
 	public void move() {
 		yPos += YVEL;

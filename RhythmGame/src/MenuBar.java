@@ -1,3 +1,4 @@
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -69,23 +70,17 @@ public class MenuBar implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (selectFile == o) {
-			System.out.println("File Selected");
 			String path = System.getProperty("user.dir") + "\\music";
 			chooser = new JFileChooser("Select a file");
 			chooser.setCurrentDirectory(new File(path));
 			int result = chooser.showOpenDialog(game);
 			if (result == JFileChooser.APPROVE_OPTION) {
-				System.out.println("Haven't tested this part yet. I hope it works");
 				File file = chooser.getSelectedFile();
 				fileName = file;
 			}
-			System.out.println(
-					"I got the Absolute Path of the file, I have no clue " + "what to do with it, but I got it");
 		} else if (startGame == o && fileName != null) {
-			System.out.println("Game starts");
 			game.start(GameState.PLAY, fileName);
 		} else if (startRecord == o && fileName != null) {
-			System.out.println("Record starts");
 			game.start(GameState.RECORD, fileName);
 
 		} else if (quit == o) {

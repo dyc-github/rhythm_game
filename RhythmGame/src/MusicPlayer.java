@@ -38,7 +38,6 @@ public class MusicPlayer {
 		if (clip != null) {
 			clip.close();
 		}
-		// https://www.geeksforgeeks.org/play-audio-file-using-java/
 		try {
 			// create AudioInputStream object
 			audioInputStream = AudioSystem.getAudioInputStream(new File(path).getAbsoluteFile());
@@ -57,7 +56,6 @@ public class MusicPlayer {
 			System.out.println("The audio file selected is unsuported");
 			return false;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			System.out.println("error occcured in retrieving the file");
 			e.printStackTrace();
 			return false;
