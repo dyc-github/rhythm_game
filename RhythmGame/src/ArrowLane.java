@@ -9,18 +9,19 @@ public class ArrowLane
 
     private final int xPos;
 
-    private static final int goal = 800;// change later
+    private static int goal;// change later
 
     private LinkedList<Arrow> arrows;
 
     private final Direction direction;
 
 
-    public ArrowLane( int xPos, Direction direction )
+    public ArrowLane( int xPos, Direction direction, int screenSize)
     {
         this.direction = direction;
         this.xPos = xPos;
         arrows = new LinkedList<Arrow>();
+        setGoal(screenSize);
     }
 
 
@@ -44,16 +45,16 @@ public class ArrowLane
         {
             arrow = arrows.get( position );
             diff = Math.abs( arrow.getY() - goal );
-            if ( diff <= 25 )
+            if ( diff <= 27 )
             { // TODO define perfect
                 score = 3; // FYI 3 is best
             }
-            else if ( diff <= 50 )
+            else if ( diff <= 60 )
             { // TODO define ok
                 score = 2;
             }
-            else if ( diff <= 75 )
-            { // TODO defien bad
+            else if ( diff <= 100 )
+            { // TODO define bad
                 score = 1;
             }
             else
@@ -62,10 +63,11 @@ public class ArrowLane
                 position++;
             }
             
-        } while (score == 0 && arrow.getY()>goal+75 && position<arrows.size());
+        } while (score == 0 && arrow.getY()>goal-100 && position<arrows.size());
         if (score>0) {
             arrows.remove( position );
         }
+        
         return score;
     }
 
@@ -112,5 +114,10 @@ public class ArrowLane
     {
         return goal;
     }
+    public static void setGoal(int screenSize){
+    	goal = screenSize - Arrow.getHalfHeight() * 2;
+    }
+    
+
 
 }

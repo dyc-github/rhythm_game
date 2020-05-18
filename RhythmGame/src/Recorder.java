@@ -3,12 +3,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.FileAlreadyExistsException;
 
 public class Recorder {
 	private MusicPlayer musicPlayer;
 	private PrintWriter output;
 	private String path;
-	private final int CONSTANT = 0;
 
 	public Recorder(MusicPlayer musicPlayer) {
 		this.musicPlayer = musicPlayer;
@@ -16,34 +16,27 @@ public class Recorder {
 		path = System.getProperty("user.dir") + "/levels/";
 	}
 
-	public void startNewRecodring(String songTitle) {
+	public void startNewRecodring(String songTitle) throws FileAlreadyExistsException  {
 		String levelPath = path + songTitle + "_Arrow.txt";
-		
-		musicPlayer.defineSong(songTitle + ".wav");
 		
 		File outputFile = new File(levelPath);
 		
 		if (outputFile.exists()) {
-			System.out.println("file already exists");
-			return;// TODO define the specifics of what happens if a record file already exists
-		} else {
-			try {
-				outputFile.createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				System.out.println("error creating file");
-				e.printStackTrace();
-				return;
-			}
-
-			try {
-				output = new PrintWriter(levelPath);
-			} catch (FileNotFoundException e) {
-				System.out.println("cannot find " + songTitle + "_Arrow.txt");
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			musicPlayer.play();
+			throw new FileAlreadyExistsException(levelPath);
+		} 
+		else {
+				try {
+					outputFile.createNewFile();
+				} catch (IOException e) {
+					System.out.println("issue creating new file");
+					e.printStackTrace();
+				}
+				try {
+					output = new PrintWriter(levelPath);
+				} catch (FileNotFoundException e) {
+					System.out.println("issue finding output file");
+					e.printStackTrace();
+				}
 		}
 	}
 
@@ -65,7 +58,7 @@ public class Recorder {
 				break;
 			}
 			if (!outputString.isEmpty()) {
-				output.println(outputString + (musicPlayer.getCurrentTime() - CONSTANT));
+				output.println(outputString + (musicPlayer.getCurrentTime()));
 			}
 		}
 	}

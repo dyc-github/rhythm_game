@@ -16,18 +16,18 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class MusicPlayer
 {
-	private String musicFile = "music"; 
+//	private String musicFile = "music"; 
 	// ah fyi System.getProperty("user.dir") just get the directory to RhythmGame
-	private String path = System.getProperty("user.dir") + "/" + musicFile;
+//	private String path = System.getProperty("user.dir") + "/" + musicFile;
 	private AudioInputStream audioInputStream;
 	private Clip clip; 
 	
 	public MusicPlayer() {
-		new File(musicFile).mkdir();
+//		new File(musicFile).mkdir();
 		//??? what does this do, it doesn't go to a variable
 	}
 
-	public boolean defineSong(String pathname) {
+	public boolean defineSong(String path) {
 		if (clip!=null) {
 			clip.close();
 		}
@@ -35,7 +35,7 @@ public class MusicPlayer
 		// https://www.geeksforgeeks.org/play-audio-file-using-java/
 		try {
 			// create AudioInputStream object
-			audioInputStream = AudioSystem.getAudioInputStream(new File(pathname).getAbsoluteFile());
+			audioInputStream = AudioSystem.getAudioInputStream(new File(path).getAbsoluteFile());
 
 			// create clip reference
 			clip = AudioSystem.getClip();
@@ -94,10 +94,12 @@ public class MusicPlayer
 	}
 	
 	public int getCurrentTime(){
-		return (int)(clip.getMicrosecondPosition()+50000)/10000;
+		//convert to milliseconds
+		return (int)(clip.getMicrosecondPosition()+500)/1000;
 	}
 	public int getTotalTime() {
-		return (int)(clip.getMicrosecondLength()+50000)/10000;
+		//convert to milliseconds
+		return (int)(clip.getMicrosecondLength()+500)/1000;
 	}
 	
 

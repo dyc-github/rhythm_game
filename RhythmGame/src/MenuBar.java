@@ -16,12 +16,11 @@ public class MenuBar implements ActionListener
     JMenu file,play;
     JMenuItem selectFile,quit,startGame, startRecord;
     JFileChooser chooser;
-    MusicPlayer mp;
+    File fileName;
     
-    public MenuBar(RhythmGame g, JFrame window, MusicPlayer musicPlayer) {
+    public MenuBar(RhythmGame g, JFrame window) {
         game = g;
         menubar = new JMenuBar();
-        mp = musicPlayer;
         window.setJMenuBar( menubar );
         
         JMenu file = new JMenu("File");
@@ -63,27 +62,29 @@ public class MenuBar implements ActionListener
             if (result == JFileChooser.APPROVE_OPTION) {
                 System.out.println( "Haven't tested this part yet. I hope it works" );
                 File file = chooser.getSelectedFile();
-                System.out.println( file.getAbsolutePath() );
-                mp.defineSong( file.getAbsolutePath() );
+                fileName = file;
             }
             System.out.println( "I got the Absolute Path of the file, I have no clue "
                 + "what to do with it, but I got it");
             //TODO call define song, either change the parameters to the whole 
             //pathname or remove the end from the pathname obtained by the method
         }
-        else if (startGame == o) {
+        else if (startGame == o && fileName != null) {
             System.out.println( "Game starts" );
-            game.start(true);
+            game.start(GameState.PLAY,fileName);
         }
-        else if (startRecord == o) {
+        else if (startRecord == o && fileName != null) {
             System.out.println( "Record starts" );
-            game.start(false);
+            game.start(GameState.RECORD,fileName);
+            
         }
         else if (quit == o) {
             System.exit( 0 );
         }
         
     }
+   
+    	
     
     
 }

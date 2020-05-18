@@ -8,7 +8,7 @@ public class Arrow
     private static final int SHIFT= 50;
     private ArrowLane lane;
     public Arrow(ArrowLane al) {
-        yPos = 50;
+        yPos = -SHIFT;
         lane = al;
     }
     
